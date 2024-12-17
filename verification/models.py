@@ -19,7 +19,7 @@ class VerificationCode(UniversalIdModel, TimeStampedModel):
         User, on_delete=models.CASCADE, related_name="verification_codes"
     )
     purpose = models.CharField(max_length=20, choices=PURPOSE_CHOICES)
-    code = models.CharField(max_length=6)
+    code = models.CharField(max_length=6, unique=True)
     expires_at = models.DateTimeField()
     used = models.BooleanField(default=False)
 
@@ -38,3 +38,6 @@ class VerificationCode(UniversalIdModel, TimeStampedModel):
 
     def is_valid(self):
         return now() < self.expires_at and not self.used
+
+    def __str__(self):
+        return f"Verification Code for {self.user.email}"

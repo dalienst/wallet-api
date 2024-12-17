@@ -37,3 +37,24 @@ def send_verification_email(user, verification_code):
         [user.email],
         fail_silently=False,
     )
+
+
+def send_password_reset_email(user, verification_code):
+    """
+    A function to send a password reset email
+    """
+    email_body = render_to_string(
+        "password_reset.html",
+        {
+            "user": user,
+            "verification_code": verification_code,
+        },
+    )
+
+    send_mail(
+        "Reset your password",
+        email_body,
+        EMAIL_USER,
+        [user.email],
+        fail_silently=False,
+    )
