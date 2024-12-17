@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from accounts.serializers import (
     UserSerializer,
     CustomTokenObtainPairSerializer,
-    VerificationCodeSerializer,
+    VerifyCodeSerializer,
 )
 
 User = get_user_model()
@@ -35,7 +35,7 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 class VerifyEmailView(APIView):
     def post(self, request, *args, **kwargs):
-        serializer = VerificationCodeSerializer(data=request.data)
+        serializer = VerifyCodeSerializer(data=request.data)
 
         if serializer.is_valid():
             user = serializer.validated_data.get("user")

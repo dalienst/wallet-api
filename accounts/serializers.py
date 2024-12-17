@@ -67,7 +67,9 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
 
         # create verification code
-        verification_code = VerificationCode.objects.create(user=user)
+        verification_code = VerificationCode.objects.create(
+            user=user, purpose="email_verification"
+        )
 
         # send verification email
         send_verification_email(user, verification_code.code)

@@ -37,4 +37,4 @@ class VerificationCode(UniversalIdModel, TimeStampedModel):
         super().save(*args, **kwargs)
 
     def is_valid(self):
-        return self.expires_at > now() and not self.used
+        return now() < self.expires_at and not self.used
