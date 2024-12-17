@@ -4,8 +4,11 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.db import models
+from datetime import timedelta
+from django.utils.timezone import now
 
 from accounts.abstracts import UniversalIdModel, ReferenceSlugModel, TimeStampedModel
+from verification.utils import generate_code
 
 
 class UserManager(BaseUserManager):

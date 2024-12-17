@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "cloudinary",
     # Apps
     "accounts",
+    "verification",
 ]
 
 MIDDLEWARE = [
@@ -161,6 +162,9 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
