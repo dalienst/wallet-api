@@ -1,0 +1,24 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+cloudinary = "1.41.0"
+dj-database-url = "2.3.0"
+django = "5.1.4"
+django-cors-headers = "4.6.0"
+django-filter = "24.3"
+djangorestframework = "3.15.2"
+djangorestframework-simplejwt = "5.3.1"
+gunicorn = "23.0.0"
+markdown = "3.7"
+pillow = "11.0.0"
+psycopg2-binary = "2.9.10"
+python-decouple = "3.8"
+whitenoise = "6.8.2"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"
