@@ -16,10 +16,6 @@ urlpatterns = [
     path("signup/", UserCreateView.as_view(), name="user-create"),
     path("verify-account/", VerifyEmailView.as_view(), name="verify-email"),
     path("<str:id>/", UserDetailView.as_view(), name="user-detail"),
-    path(
-        "reset/",
-        RequestPasswordResetView.as_view(),
-        name="request-password-reset",
-    ),
-    path("reset-password/", PasswordResetView.as_view(), name="password-reset"),
+    path("password/reset/", RequestPasswordResetView.as_view(), name="password-reset"),
+    path("password/new/", PasswordResetView.as_view(), name="password-reset"),
 ]

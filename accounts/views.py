@@ -61,16 +61,13 @@ class VerifyEmailView(APIView):
 
 
 class RequestPasswordResetView(APIView):
-    permission_classes = (AllowAny,)
-
     def post(self, request, *args, **kwargs):
         serializer = RequestPasswordResetSerializer(data=request.data)
 
         if serializer.is_valid():
             verification = serializer.save()
 
-            # Send password reset email
-            send_password_reset_email(verification.user, verification)
+            send_password_reset_email(verification.user, verification.code)
 
             return Response(
                 {"message": "Password reset email sent successfully!"},
