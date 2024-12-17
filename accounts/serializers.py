@@ -78,15 +78,20 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class VerifyCodeSerializer(serializers.Serializer):
-    email = serializers.EmailField()
     code = serializers.CharField()
 
     def validate(self, attrs):
-        email = attrs.get("email")
         code = attrs.get("code")
 
         try:
-            user = User.objects.get(email=email)
+            verification = VerificationCode.objects.get(
+                code=code, purpose="email_verification", used=False
+            )
+        except VerificationCode.DoesNotExist:
+            raise serializers.ValidationError("Invalid or expired verification code!")
+
+        try:
+            user = User.objects.get(email=verification.user.email)
         except User.DoesNotExist:
             raise serializers.ValidationError("Account with this email does not exist!")
 
