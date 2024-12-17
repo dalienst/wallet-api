@@ -1,9 +1,69 @@
-{% autoescape off %}
-Hello {{ user.email }},
+<!DOCTYPE html>
+<html>
 
-Use the code below to verify your account:
+    <head>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
+            }
 
-{{ verification_code }}
+            .container {
+                max-width: 600px;
+                margin: 20px auto;
+                background: #ffffff;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
 
-Thanks,
-{% endautoescape %}
+            .header {
+                background-color: #4CAF50;
+                color: white;
+                text-align: center;
+                padding: 20px;
+            }
+
+            .content {
+                padding: 20px;
+                color: #333;
+            }
+
+            .verification-code {
+                font-size: 20px;
+                color: #4CAF50;
+                font-weight: bold;
+                text-align: center;
+                margin: 20px 0;
+            }
+
+            .footer {
+                text-align: center;
+                background-color: #f4f4f4;
+                color: #777;
+                padding: 10px;
+                font-size: 12px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>Welcome to Wallet</h1>
+            </div>
+            <div class="content">
+                <p>Hello {{ user.email }},</p>
+                <p>Use the code below to verify your account:</p>
+                <div class="verification-code">{{ verification_code }}</div>
+                <p>If you didn't request this, please ignore this email.</p>
+                <p>Thanks,<br>The Wallet Team</p>
+            </div>
+            <div class="footer">
+                <p>&copy; {{ current_year }} Wallet. All rights reserved.</p>
+            </div>
+        </div>
+    </body>
+</html>

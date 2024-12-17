@@ -1,9 +1,13 @@
 import string
 import secrets
+from datetime import datetime
 
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from wallet.settings import DOMAIN, EMAIL_USER
+from wallet.settings import EMAIL_USER
+
+
+current_year = datetime.now().year
 
 
 def generate_slug():
@@ -27,6 +31,7 @@ def send_verification_email(user, verification_code):
         {
             "user": user,
             "verification_code": verification_code,
+            "current_year": current_year,
         },
     )
 
@@ -48,6 +53,7 @@ def send_password_reset_email(user, verification_code):
         {
             "user": user,
             "verification_code": verification_code,
+            "current_year": current_year,
         },
     )
 
