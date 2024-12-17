@@ -26,6 +26,7 @@ def send_verification_email(user, verification_code):
     """
     A function to send a verification email
     """
+    current_year = datetime.now().year
     email_body = render_to_string(
         "account_verification.html",
         {
@@ -36,11 +37,12 @@ def send_verification_email(user, verification_code):
     )
 
     send_mail(
-        "Verify your account",
-        email_body,
-        EMAIL_USER,
-        [user.email],
+        subject="Verify your account",
+        message="",  # Leave plain text empty if you're only sending HTML
+        from_email=EMAIL_USER,
+        recipient_list=[user.email],
         fail_silently=False,
+        html_message=email_body,  # Provide the rendered HTML template here
     )
 
 
@@ -48,6 +50,7 @@ def send_password_reset_email(user, verification_code):
     """
     A function to send a password reset email
     """
+    current_year = datetime.now().year
     email_body = render_to_string(
         "password_reset.html",
         {
@@ -58,9 +61,10 @@ def send_password_reset_email(user, verification_code):
     )
 
     send_mail(
-        "Reset your password",
-        email_body,
-        EMAIL_USER,
-        [user.email],
+        subject="Reset your password",
+        message="",  # Leave plain text empty if you're only sending HTML
+        from_email=EMAIL_USER,
+        recipient_list=[user.email],
         fail_silently=False,
+        html_message=email_body,  # Provide the rendered HTML template here
     )
