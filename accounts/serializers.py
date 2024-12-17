@@ -10,6 +10,7 @@ from accounts.validators import (
     validate_password_symbol,
 )
 from verification.models import VerificationCode
+from accounts.utils import send_verification_email
 
 User = get_user_model()
 
@@ -61,7 +62,17 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        # create user
+        user = User.objects.create_user(**validated_data)
+        user.save()
+
+        # create verification code
+        verification_code = VerificationCode.objects.create(user=user)
+
+        # send verification email
+        send_verification_email(user, verification_code.code)
+
+        return user
 
 
 class VerifyCodeSerializer(serializers.Serializer):
