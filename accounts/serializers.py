@@ -125,9 +125,6 @@ class RequestPasswordResetSerializer(serializers.Serializer):
             user=user, purpose="password_reset"
         )
 
-        # send password reset email
-        send_password_reset_email(user, verification.code)
-
         return verification
 
 
