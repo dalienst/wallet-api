@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     # Apps
     "accounts",
     "verification",
+    "projects",
 ]
 
 MIDDLEWARE = [
