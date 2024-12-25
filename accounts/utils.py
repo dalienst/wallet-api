@@ -13,7 +13,7 @@ current_year = datetime.now().year
 def generate_slug():
     characters = string.ascii_letters + string.digits
     random_string = "".join(secrets.choice(characters) for _ in range(16))
-    return random_string
+    return random_string.upper()
 
 
 def generate_reference():
