@@ -178,3 +178,5 @@ class PasswordResetSerializer(serializers.Serializer):
         # mark code as used
         verification.used = True
         verification.save()
+
+        return user
