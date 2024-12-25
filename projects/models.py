@@ -9,7 +9,6 @@ User = get_user_model()
 class Project(UniversalIdModel, ReferenceSlugModel, TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="projects")
     title = models.CharField(max_length=255)
-    date = models.DateField()
 
     class Meta:
         verbose_name = "Project"

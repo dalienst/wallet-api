@@ -12,7 +12,6 @@ class ProjectSerializer(serializers.ModelSerializer):
             "id",
             "user",
             "title",
-            "date",
             "created_at",
             "updated_at",
             "reference",
