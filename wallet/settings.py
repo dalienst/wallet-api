@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "accounts",
     "verification",
     "projects",
+    "tasks",
 ]
 
 MIDDLEWARE = [
