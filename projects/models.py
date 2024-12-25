@@ -7,6 +7,14 @@ User = get_user_model()
 
 
 class Project(UniversalIdModel, ReferenceSlugModel, TimeStampedModel):
+    """
+    Can be:
+    - project
+    - team
+    - client
+
+    Name project is used for lack of a better name
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="projects")
     title = models.CharField(max_length=255)
 
