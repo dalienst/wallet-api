@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from datetime import date
 
 from projects.models import Project
 from tasks.models import Task
@@ -23,6 +24,14 @@ class TaskSerializer(serializers.ModelSerializer):
             "reference",
             "slug",
         )
+
+    def validate_date(self, value):
+        """
+        Ensure the date is not in the past.
+        """
+        if value < date.today():
+            raise serializers.ValidationError("The date cannot be in the past.")
+        return value
 
 
 class ProgresOverviewSerializer(serializers.Serializer):
