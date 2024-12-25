@@ -2,6 +2,7 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
 
 from tasks.models import Task
 from tasks.serializers import TaskSerializer, ProgresOverviewSerializer
@@ -14,6 +15,8 @@ class TaskListCreateView(generics.ListCreateAPIView):
     permission_classes = [
         IsAuthenticated,
     ]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["date", "is_completed"]
 
     def get_queryset(self):
         return super().get_queryset().filter(project__user=self.request.user)
