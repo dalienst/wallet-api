@@ -1,8 +1,11 @@
 from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from tasks.models import Task
-from tasks.serializers import TaskSerializer
+from tasks.serializers import TaskSerializer, ProgresOverviewSerializer
+from tasks.utils import get_daily_progress
 
 
 class TaskListCreateView(generics.ListCreateAPIView):
@@ -26,3 +29,14 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return super().get_queryset().filter(project__user=self.request.user)
+
+
+class DailyProgressView(APIView):
+    permission_classes = [
+        IsAuthenticated,
+    ]
+
+    def get(self, request, date):
+        progress = get_daily_progress(request.user, date)
+        serializer = ProgresOverviewSerializer(progress)
+        return Response(serializer.data)

@@ -8,6 +8,7 @@ class TaskSerializer(serializers.ModelSerializer):
     project = serializers.SlugRelatedField(
         slug_field="slug", queryset=Project.objects.all()
     )
+    date = serializers.DateField()
 
     class Meta:
         model = Task
@@ -22,3 +23,9 @@ class TaskSerializer(serializers.ModelSerializer):
             "reference",
             "slug",
         )
+
+
+class ProgresOverviewSerializer(serializers.Serializer):
+    date = serializers.DateField()
+    completed = serializers.IntegerField()
+    incomplete = serializers.IntegerField()
