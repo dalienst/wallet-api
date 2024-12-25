@@ -10,7 +10,8 @@ from accounts.validators import (
     validate_password_symbol,
 )
 from verification.models import VerificationCode
-from accounts.utils import send_verification_email, send_password_reset_email
+from accounts.utils import send_verification_email
+from projects.serializers import ProjectSerializer
 
 User = get_user_model()
 
@@ -45,6 +46,7 @@ class UserSerializer(serializers.ModelSerializer):
             validate_password_lowercase,
         ],
     )
+    projects = ProjectSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
@@ -52,6 +54,7 @@ class UserSerializer(serializers.ModelSerializer):
             "id",
             "email",
             "password",
+            "projects",
             "is_staff",
             "is_superuser",
             "is_verified",
