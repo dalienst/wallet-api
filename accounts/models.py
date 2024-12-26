@@ -53,13 +53,14 @@ class User(
     TimeStampedModel,
     ReferenceSlugModel,
 ):
+    name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["password"]
+    REQUIRED_FIELDS = ["password", "name"]
 
     objects = UserManager()
 
