@@ -19,7 +19,11 @@ class TaskListCreateView(generics.ListCreateAPIView):
     filterset_fields = ["date", "is_completed"]
 
     def get_queryset(self):
-        return super().get_queryset().filter(user=self.request.user)
+        return (
+            super()
+            .get_queryset()
+            .filter(user=self.request.user, project__user=self.request.user)
+        )
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -34,7 +38,11 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = "slug"
 
     def get_queryset(self):
-        return super().get_queryset().filter(user=self.request.user)
+        return (
+            super()
+            .get_queryset()
+            .filter(user=self.request.user, project__user=self.request.user)
+        )
 
 
 class DailyProgressView(APIView):
