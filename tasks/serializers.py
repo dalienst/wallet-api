@@ -6,8 +6,9 @@ from tasks.models import Task
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source="user.email", read_only=True)
     project = serializers.SlugRelatedField(
-        slug_field="slug", queryset=Project.objects.all()
+        slug_field="slug", queryset=Project.objects.all(), required=False
     )
     date = serializers.DateField()
 
@@ -15,6 +16,7 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = (
             "id",
+            "user",
             "project",
             "title",
             "date",

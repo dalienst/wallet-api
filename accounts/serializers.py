@@ -12,6 +12,7 @@ from accounts.validators import (
 from verification.models import VerificationCode
 from accounts.utils import send_verification_email
 from projects.serializers import ProjectSerializer
+from tasks.serializers import TaskSerializer
 
 User = get_user_model()
 
@@ -47,6 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
         ],
     )
     projects = ProjectSerializer(many=True, read_only=True)
+    my_tasks = TaskSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
@@ -56,6 +58,7 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "password",
             "projects",
+            "my_tasks",
             "is_staff",
             "is_superuser",
             "is_verified",
