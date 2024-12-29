@@ -22,7 +22,7 @@ class TaskListCreateView(generics.ListCreateAPIView):
         return (
             super()
             .get_queryset()
-            .filter(user=self.request.user, project__user=self.request.user)
+            .filter(user=self.request.user)
         )
 
     def perform_create(self, serializer):
@@ -38,11 +38,7 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = "slug"
 
     def get_queryset(self):
-        return (
-            super()
-            .get_queryset()
-            .filter(user=self.request.user, project__user=self.request.user)
-        )
+        return super().get_queryset().filter(user=self.request.user)
 
 
 class DailyProgressView(APIView):
