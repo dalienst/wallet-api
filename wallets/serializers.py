@@ -19,3 +19,10 @@ class WalletSerializer(serializers.ModelSerializer):
             "reference",
             "slug",
         )
+
+    def update(self, instance, validated_data):
+        instance.balance = validated_data.get("balance", instance.balance)
+        instance.currency = validated_data.get("currency", instance.currency)
+        instance.status = validated_data.get("status", instance.status)
+        instance.save()
+        return instance
