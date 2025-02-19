@@ -9,8 +9,7 @@ class PesapalAuthenticator:
     Handles Pesapal authentication and token retrieval.
     """
 
-    PESAPAL_AUTH_BASE_URL = "https://cybqa.pesapal.com/pesapalv3/api/Auth/RequestToken"
-    # PESAPAL_AUTH_BASE_URL = "https://pay.pesapal.com/v3/api/Auth/RequestToken"
+    PESAPAL_AUTH_BASE_URL = settings.PESAPAL_AUTH_BASE_URL
     TOKEN_EXPIRY_SECONDS = 300  # 5 minutes
     TOKEN_EXPIRY_BUFFER = 30  # Refresh token 30 seconds before expiry
 

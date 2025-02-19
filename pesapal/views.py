@@ -2,9 +2,11 @@ import requests
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+
 from pesapal.models import PesapalIPN
 from pesapal.serializers import PesapalIPNSerializer
 from pesapal.utils import PesapalAuthenticator
+from wallet.settings import PESAPAL_IPN_URL
 
 
 class RegisterIPNView(APIView):
@@ -29,7 +31,7 @@ class RegisterIPNView(APIView):
             bearer_token = PesapalAuthenticator.get_token()
 
             # Register IPN with Pesapal
-            pesapal_url = "https://cybqa.pesapal.com/pesapalv3/api/URLSetup/RegisterIPN"
+            pesapal_url = PESAPAL_IPN_URL
 
             payload = {
                 "url": url,
