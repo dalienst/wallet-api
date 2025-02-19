@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     "projects",
     "tasks",
     "wallets",
+    "pesapal",
+    "transactions",
 ]
 
 MIDDLEWARE = [
@@ -209,9 +211,14 @@ cloudinary.config(
     api_secret=config("CLOUDINARY_API_SECRET"),
 )
 
-# PESAPAL settings
+API_URL = config("API_URL")
+
+# PESAPAL LIVE settings
 PESAPAL_SANDBOX_URL = config("PESAPAL_SANDBOX_URL")
 PESAPAL_LIVE_URL = config("PESAPAL_LIVE_URL")
-# PESAPAL_CALLBACK_URL = config("PESAPAL_CALLBACK_URL")
 PESAPAL_CONSUMER_KEY = config("PESAPAL_CONSUMER_KEY")
 PESAPAL_CONSUMER_SECRET = config("PESAPAL_CONSUMER_SECRET")
+PESAPAL_IPN_URL = f"{API_URL}/api/transactions/pesapal/ipn/"
+# PESAPAL URLs
+PESAPAL_AUTH_BASE_URL = config("PESAPAL_AUTH_BASE_URL")
+PESAPAL_IPN_URL = config("PESAPAL_IPN_URL")
