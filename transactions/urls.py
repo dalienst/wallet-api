@@ -9,5 +9,5 @@ from transactions.views import (
 urlpatterns = [
     path("", TransactionListCreateAPIView.as_view(), name="transaction-list-create"),
     path("<str:slug>/", TrasactionDetailAPIView.as_view(), name="transaction-detail"),
-    path("ipn/", IPNHandlerAPIView.as_view(), name="ipn-handler"),
+    path("pesapal/ipn/", IPNHandlerAPIView.as_view(), name="ipn-handler"),
 ]
