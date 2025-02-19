@@ -95,7 +95,7 @@ CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS").split(",")
 
 AUTH_USER_MODEL = "accounts.User"
 
-ROOT_URLCONF = "wallet.urls"
+ROOT_URLCONF = "wallet_api.urls"
 
 TEMPLATES = [
     {
@@ -113,7 +113,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "wallet.wsgi.application"
+WSGI_APPLICATION = "wallet_api.wsgi.application"
 
 
 # Database
@@ -222,3 +222,5 @@ PESAPAL_IPN_URL = f"{API_URL}/api/transactions/pesapal/ipn/"
 # PESAPAL URLs
 PESAPAL_AUTH_BASE_URL = config("PESAPAL_AUTH_BASE_URL")
 PESAPAL_IPN_URL = config("PESAPAL_IPN_URL")
+PESAPAL_GET_IPN_URLS = config("PESAPAL_GET_IPN_URLS")
+PESAPAL_PAYMENT_URL = config("PESAPAL_PAYMENT_URL")

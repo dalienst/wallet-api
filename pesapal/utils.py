@@ -1,61 +1,44 @@
 import requests
-from wallet.settings import (
-    PESAPAL_AUTH_BASE_URL,
-    PESAPAL_CONSUMER_KEY,
-    PESAPAL_CONSUMER_SECRET,
-)
-from django.utils.timezone import now
-from datetime import timedelta
+from django.core.cache import cache
+from django.conf import settings
 
 
 class PesapalAuthenticator:
-    """
-    Handles Pesapal authentication and token retrieval.
-    """
-
-    PESAPAL_AUTH_BASE_URL = PESAPAL_AUTH_BASE_URL
-    TOKEN_EXPIRY_SECONDS = 300  # 5 minutes
-    TOKEN_EXPIRY_BUFFER = 30  # Refresh token 30 seconds before expiry
-
-    # Store token and expiry as class variables for caching
-    _token = None
-    _expiry = None
-
-    @classmethod
-    def get_token(cls):
+    @staticmethod
+    def get_bearer_token(consumer_key, consumer_secret):
         """
-        Fetch a new token from Pesapal if it is expired or not set.
+        Authenticate with Pesapal and retrieve the Bearer token.
         """
-        # Reuse the token if it's still valid
-        if (
-            cls._token
-            and cls._expiry
-            and now() < cls._expiry - timedelta(seconds=cls.TOKEN_EXPIRY_BUFFER)
-        ):
-            return cls._token
+        # auth_url = "https://cybqa.pesapal.com/pesapalv3/api/Auth/RequestToken"
+        auth_url = "https://pay.pesapal.com/v3/api/Auth/RequestToken"
 
-        # Request new token
-        headers = {"Content-Type": "application/json"}
-        data = {
-            "consumer_key": PESAPAL_CONSUMER_KEY,
-            "consumer_secret": PESAPAL_CONSUMER_SECRET,
-        }
+        payload = {"consumer_key": consumer_key, "consumer_secret": consumer_secret}
 
-        response = requests.post(cls.PESAPAL_AUTH_BASE_URL, json=data, headers=headers)
+        headers = {"Accept": "application/json", "Content-Type": "application/json"}
 
-        try:
-            response_data = response.json()
-        except Exception as e:
-            raise Exception(f"Error decoding Pesapal response: {str(e)}")
+        response = requests.post(auth_url, json=payload, headers=headers)
 
-        if response.status_code == 200 and "token" in response_data:
-            cls._token = response_data["token"]
-            cls._expiry = now() + timedelta(seconds=cls.TOKEN_EXPIRY_SECONDS)
-            return cls._token
+        if response.status_code == 200:
+            token_data = response.json()
+            token = token_data.get("token")
+            expiry_date = token_data.get(
+                "expiryDate"
+            )  # Assuming Pesapal returns this field
 
-        raise Exception(
-            f"Pesapal Auth Error: {response_data.get('message', 'Unknown error')}"
-        )
+            # Cache the token with its expiry time (5 minutes)
+            cache.set(
+                "pesapal_bearer_token", token, timeout=300
+            )  # 300 seconds = 5 minutes
+            return token
+        else:
+            raise Exception(f"Failed to authenticate with Pesapal: {response.text}")
 
-
-print(PesapalAuthenticator.get_token())
+    @staticmethod
+    def get_cached_bearer_token(consumer_key, consumer_secret):
+        """
+        Retrieve the cached Bearer token or fetch a new one if expired.
+        """
+        token = cache.get("pesapal_bearer_token")
+        if not token:
+            token = PesapalAuthenticator.get_bearer_token(consumer_key, consumer_secret)
+        return token

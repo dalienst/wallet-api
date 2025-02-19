@@ -4,7 +4,7 @@ from datetime import datetime
 
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from wallet.settings import EMAIL_USER
+from wallet_api.settings import EMAIL_USER
 
 
 current_year = datetime.now().year
