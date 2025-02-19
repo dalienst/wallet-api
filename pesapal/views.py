@@ -2,11 +2,16 @@ import requests
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+
 from pesapal.models import PesapalIPN
 from django.core.cache import cache
 from pesapal.serializers import PesapalIPNSerializer
 from pesapal.utils import PesapalAuthenticator
-from wallet_api.settings import PESAPAL_CONSUMER_KEY, PESAPAL_CONSUMER_SECRET
+from wallet_api.settings import (
+    PESAPAL_CONSUMER_KEY,
+    PESAPAL_CONSUMER_SECRET,
+    PESAPAL_GET_IPN_URLS,
+)
 
 
 class RegisterIPNView(APIView):
@@ -73,6 +78,50 @@ class RegisterIPNView(APIView):
                 # Clear the cached token and retry
                 cache.delete("pesapal_bearer_token")
                 return self.post(request, *args, **kwargs)  # Retry the request
+            else:
+                # If there's an error, return the error response from Pesapal
+                return Response(response.json(), status=response.status_code)
+
+        except Exception as e:
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+class GetIPNUrlsView(APIView):
+    def get(self, request, *args, **kwargs):
+        # Get consumer key and secret from request body
+        consumer_key = PESAPAL_CONSUMER_KEY
+        consumer_secret = PESAPAL_CONSUMER_SECRET
+
+        if not consumer_key or not consumer_secret:
+            return Response(
+                {"error": "Consumer key and secret are required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Get the IPNs from PESAPAL_GET_IPN_URLS
+        try:
+            # Get the cached or new Bearer token
+            bearer_token = PesapalAuthenticator.get_cached_bearer_token(
+                consumer_key, consumer_secret
+            )
+
+            # Get the IPN URLs from Pesapal
+            headers = {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {bearer_token}",
+            }
+
+            response = requests.get(PESAPAL_GET_IPN_URLS, headers=headers)
+
+            if response.status_code == 200:
+                return Response(response.json(), status=status.HTTP_200_OK)
+            elif response.status_code == 401:  # Unauthorized (token expired)
+                # Clear the cached token and retry
+                cache.delete("pesapal_bearer_token")
+                return self.get(request, *args, **kwargs)  # Retry the request
             else:
                 # If there's an error, return the error response from Pesapal
                 return Response(response.json(), status=response.status_code)
