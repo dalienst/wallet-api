@@ -13,6 +13,7 @@ from verification.models import VerificationCode
 from accounts.utils import send_verification_email
 from projects.serializers import ProjectSerializer
 from tasks.serializers import TaskSerializer
+from wallets.models import Wallet
 
 User = get_user_model()
 
@@ -72,6 +73,8 @@ class UserSerializer(serializers.ModelSerializer):
         # create user
         user = User.objects.create_user(**validated_data)
         user.save()
+        # create wallet
+        Wallet.objects.create(user=user)
 
         # create verification code
         verification_code = VerificationCode.objects.create(
