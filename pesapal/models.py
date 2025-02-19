@@ -11,7 +11,7 @@ class PesapalIPN(TimeStampedModel, UniversalIdModel, ReferenceSlugModel):
     url = models.URLField(
         max_length=255, help_text="The IPN URL to be registered with Pesapal."
     )
-    notification_type = models.CharField(
+    ipn_notification_type = models.CharField(
         max_length=10,
         default="GET",
         help_text="The type of IPN notification (GET or POST).",
