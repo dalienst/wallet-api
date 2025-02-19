@@ -17,7 +17,7 @@ class Wallet(UniversalIdModel, TimeStampedModel, ReferenceSlugModel):
     status = models.CharField(
         max_length=10,
         choices=[("Active", "Active"), ("Suspended", "Suspended")],
-        default="active",
+        default="Active",
     )
 
     def __str__(self):

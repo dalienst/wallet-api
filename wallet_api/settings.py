@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "wallets",
     "pesapal",
     "transactions",
+    "payments",
 ]
 
 MIDDLEWARE = [

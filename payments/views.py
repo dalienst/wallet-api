@@ -114,7 +114,7 @@ class SubmitOrderView(APIView):
             )
 
 
-class CallbackView(APIView):
+class PesapalCallbackView(APIView):
     def get(self, request, *args, **kwargs):
         order_tracking_id = request.query_params.get("OrderTrackingId")
 
