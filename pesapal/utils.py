@@ -1,5 +1,5 @@
 import requests
-from wallet.settings import (
+from wallet_api.settings import (
     PESAPAL_AUTH_BASE_URL,
     PESAPAL_CONSUMER_KEY,
     PESAPAL_CONSUMER_SECRET,
@@ -58,4 +58,4 @@ class PesapalAuthenticator:
         )
 
 
-print(PesapalAuthenticator.get_token())
+# print(PesapalAuthenticator.get_token())

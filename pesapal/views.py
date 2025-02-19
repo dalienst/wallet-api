@@ -6,7 +6,7 @@ from rest_framework import status
 from pesapal.models import PesapalIPN
 from pesapal.serializers import PesapalIPNSerializer
 from pesapal.utils import PesapalAuthenticator
-from wallet.settings import PESAPAL_IPN_URL
+from wallet_api.settings import PESAPAL_IPN_URL
 
 
 class RegisterIPNView(APIView):

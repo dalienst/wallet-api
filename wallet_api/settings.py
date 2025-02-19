@@ -95,7 +95,7 @@ CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS").split(",")
 
 AUTH_USER_MODEL = "accounts.User"
 
-ROOT_URLCONF = "wallet.urls"
+ROOT_URLCONF = "wallet_api.urls"
 
 TEMPLATES = [
     {
@@ -113,7 +113,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "wallet.wsgi.application"
+WSGI_APPLICATION = "wallet_api.wsgi.application"
 
 
 # Database
