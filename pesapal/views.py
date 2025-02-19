@@ -11,6 +11,7 @@ from wallet_api.settings import (
     PESAPAL_CONSUMER_KEY,
     PESAPAL_CONSUMER_SECRET,
     PESAPAL_GET_IPN_URLS,
+    PESAPAL_IPN_URL,
 )
 
 
@@ -44,8 +45,7 @@ class RegisterIPNView(APIView):
             )
 
             # Register the IPN URL with Pesapal
-            # pesapal_url = "https://cybqa.pesapal.com/pesapalv3/api/URLSetup/RegisterIPN"
-            pesapal_url = "https://pay.pesapal.com/v3/api/URLSetup/RegisterIPN"
+            pesapal_url = PESAPAL_IPN_URL
 
             payload = {"url": url, "ipn_notification_type": ipn_notification_type}
 
