@@ -74,23 +74,12 @@ class IPNHandlerAPIView(APIView):
         transaction_id = request.data.get("pesapal_transaction_tracking_id")
         status = request.data.get("pesapal_notification_type")
 
-        # Validate status
-        valid_statuses = [choice[0] for choice in Transaction.STATUS_CHOICES]
-        if status.upper() not in valid_statuses:
-            logger.error(f"Invalid status received: {status}")
-            return JsonResponse({"error": "Invalid status"}, status=400)
-
         try:
             transaction = Transaction.objects.get(transaction_id=transaction_id)
-            if transaction.status == status:
-                logger.info(f"Transaction {transaction_id} status is already {status}")
-                return JsonResponse(
-                    {"message": "Transaction status is already up-to-date"}, status=200
-                )
             transaction.status = status
             transaction.save()
-            logger.info(f"Transaction {transaction_id} status updated to {status}")
+            return Response(status=status.HTTP_200_OK)
         except Transaction.DoesNotExist:
-            logger.error(f"Transaction not found: {transaction_id}")
-
-        return Response(status=status.HTTP_200_OK)
+            return Response(
+                {"error": "Transaction not found"}, status=status.HTTP_404_NOT_FOUND
+            )

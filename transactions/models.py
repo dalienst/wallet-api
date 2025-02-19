@@ -22,7 +22,11 @@ class Transaction(UniversalIdModel, TimeStampedModel, ReferenceSlugModel):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="PENDING")
     transaction_id = models.CharField(
-        max_length=255, unique=True, help_text="The unique transaction ID from Pesapal."
+        max_length=255,
+        unique=True,
+        null=True,
+        blank=True,
+        help_text="The unique transaction ID from Pesapal.",
     )
 
     class Meta:
