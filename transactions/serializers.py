@@ -17,6 +17,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             "wallet",
             "amount",
             "status",
+            "transaction_id",
             "reference",
             "slug",
             "created_at",
