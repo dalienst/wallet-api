@@ -1,5 +1,9 @@
 import requests
-from django.conf import settings
+from wallet.settings import (
+    PESAPAL_AUTH_BASE_URL,
+    PESAPAL_CONSUMER_KEY,
+    PESAPAL_CONSUMER_SECRET,
+)
 from django.utils.timezone import now
 from datetime import timedelta
 
@@ -9,7 +13,7 @@ class PesapalAuthenticator:
     Handles Pesapal authentication and token retrieval.
     """
 
-    PESAPAL_AUTH_BASE_URL = settings.PESAPAL_AUTH_BASE_URL
+    PESAPAL_AUTH_BASE_URL = PESAPAL_AUTH_BASE_URL
     TOKEN_EXPIRY_SECONDS = 300  # 5 minutes
     TOKEN_EXPIRY_BUFFER = 30  # Refresh token 30 seconds before expiry
 
@@ -33,8 +37,8 @@ class PesapalAuthenticator:
         # Request new token
         headers = {"Content-Type": "application/json"}
         data = {
-            "consumer_key": settings.PESAPAL_CONSUMER_KEY,
-            "consumer_secret": settings.PESAPAL_CONSUMER_SECRET,
+            "consumer_key": PESAPAL_CONSUMER_KEY,
+            "consumer_secret": PESAPAL_CONSUMER_SECRET,
         }
 
         response = requests.post(cls.PESAPAL_AUTH_BASE_URL, json=data, headers=headers)
@@ -52,3 +56,6 @@ class PesapalAuthenticator:
         raise Exception(
             f"Pesapal Auth Error: {response_data.get('message', 'Unknown error')}"
         )
+
+
+print(PesapalAuthenticator.get_token())

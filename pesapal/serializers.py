@@ -9,7 +9,7 @@ class PesapalIPNSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "url",
-            "notification_type",
+            "ipn_notification_type",
             "notification_id",
             "created_at",
             "updated_at",

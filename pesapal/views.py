@@ -41,7 +41,7 @@ class RegisterIPNView(APIView):
             headers = {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
-                "Authorization": f"Bearer {bearer_token}",
+                "Authorization": f"Token {bearer_token}",
             }
 
             response = requests.post(pesapal_url, json=payload, headers=headers)
