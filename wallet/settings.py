@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     "projects",
     "tasks",
     "wallets",
+    "pesapal",
+    "transactions",
 ]
 
 MIDDLEWARE = [
