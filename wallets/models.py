@@ -20,5 +20,10 @@ class Wallet(UniversalIdModel, TimeStampedModel, ReferenceSlugModel):
         default="Active",
     )
 
+    class Meta:
+        verbose_name = "Wallet"
+        verbose_name_plural = "Wallets"
+        ordering = ["-created_at"]
+
     def __str__(self):
         return f"{self.currency} {self.balance}"

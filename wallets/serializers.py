@@ -1,10 +1,12 @@
 from rest_framework import serializers
 
 from wallets.models import Wallet
+from transactions.serializers import TransactionSerializer
 
 
 class WalletSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source="user.email", read_only=True)
+    transactions = TransactionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Wallet
@@ -14,6 +16,7 @@ class WalletSerializer(serializers.ModelSerializer):
             "balance",
             "currency",
             "status",
+            "transactions",
             "created_at",
             "updated_at",
             "reference",
