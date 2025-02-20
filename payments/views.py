@@ -6,7 +6,7 @@ from django.core.cache import cache
 
 from transactions.models import Transaction
 from transactions.serializers import TransactionSerializer
-from pesapal.utils import PesapalAuthenticator
+from pesapal.utils import PesapalAuthenticator, PesapalTransactionStatus
 from payments.utils import generate_merchant_reference
 from wallet_api.settings import (
     PESAPAL_CONSUMER_KEY,
@@ -139,4 +139,78 @@ class PesapalCallbackView(APIView):
             return Response(
                 {"error": "Transaction not found"},
                 status=status.HTTP_404_NOT_FOUND,
+            )
+
+
+"""
+Payment Status
+"""
+
+
+class GetPaymentStatus(APIView):
+    def get(self, request, *args, **kwargs):
+        # Extract the order tracking ID
+        order_tracking_id = request.query_params.get("order_tracking_id")
+
+        if not order_tracking_id:
+            return Response(
+                {"error": "Order tracking ID is required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Get consumer key and secret
+        consumer_key = PESAPAL_CONSUMER_KEY
+        consumer_secret = PESAPAL_CONSUMER_SECRET
+
+        if not consumer_key or not consumer_secret:
+            return Response(
+                {"error": "Consumer key and secret are required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            # Get the cached or new bearer token
+            bearer_token = PesapalAuthenticator.get_cached_bearer_token(
+                consumer_key, consumer_secret
+            )
+
+            # Get the transaction status from Pesapal
+            transaction_status = PesapalTransactionStatus.get_transaction_status(
+                order_tracking_id, bearer_token
+            )
+
+            # Fetch transaction from DB
+            transaction = Transaction.objects.get(transaction_id=order_tracking_id)
+
+            # Update the transaction status
+            transaction.payment_method = transaction_status.get("payment_method")
+            transaction.confirmation_code = transaction_status.get("confirmation_code")
+            transaction.payment_status_description = transaction_status.get(
+                "payment_status_description"
+            )
+            transaction.payment_account = transaction_status.get("payment_account")
+            transaction.currency = transaction_status.get("currency")
+            transaction.payment_date = transaction_status.get("payment_date")
+            transaction.merchant_reference = transaction_status.get(
+                "merchant_reference"
+            )
+            transaction.callback_url = transaction_status.get("callback_url")
+            transaction.status = transaction_status.get(
+                "payment_status_description", "PENDING"
+            ).upper()
+            transaction.save()
+
+            return Response(
+                transaction_status,
+                status=status.HTTP_200_OK,
+            )
+        except Transaction.DoesNotExist:
+            return Response(
+                {"error": "Transaction not found"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )

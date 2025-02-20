@@ -28,6 +28,14 @@ class Transaction(UniversalIdModel, TimeStampedModel, ReferenceSlugModel):
         blank=True,
         help_text="The unique transaction ID from Pesapal.",
     )
+    payment_method = models.CharField(max_length=50, blank=True, null=True)
+    confirmation_code = models.CharField(max_length=100, blank=True, null=True)
+    payment_status_description = models.CharField(max_length=100, blank=True, null=True)
+    payment_account = models.CharField(max_length=100, blank=True, null=True)
+    currency = models.CharField(max_length=10, default="KES")
+    payment_date = models.DateTimeField(blank=True, null=True)
+    merchant_reference = models.CharField(max_length=50, blank=True, null=True)
+    callback_url = models.URLField(blank=True, null=True)
 
     class Meta:
         verbose_name = "Transaction"
