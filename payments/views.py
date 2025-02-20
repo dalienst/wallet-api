@@ -150,7 +150,7 @@ Payment Status
 class GetPaymentStatus(APIView):
     def get(self, request, *args, **kwargs):
         # Extract the order tracking ID
-        order_tracking_id = request.query_params.get("order_tracking_id")
+        order_tracking_id = request.query_params.get("orderTrackingId")
 
         if not order_tracking_id:
             return Response(
