@@ -17,8 +17,13 @@ class Wallet(UniversalIdModel, TimeStampedModel, ReferenceSlugModel):
     status = models.CharField(
         max_length=10,
         choices=[("Active", "Active"), ("Suspended", "Suspended")],
-        default="active",
+        default="Active",
     )
+
+    class Meta:
+        verbose_name = "Wallet"
+        verbose_name_plural = "Wallets"
+        ordering = ["-created_at"]
 
     def __str__(self):
         return f"{self.currency} {self.balance}"

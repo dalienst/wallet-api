@@ -1,6 +1,6 @@
 import requests
 from django.core.cache import cache
-from django.conf import settings
+from wallet_api.settings import PESAPAL_QUERY_PAYMENT_STATUS
 
 
 class PesapalAuthenticator:
@@ -9,7 +9,6 @@ class PesapalAuthenticator:
         """
         Authenticate with Pesapal and retrieve the Bearer token.
         """
-        # auth_url = "https://cybqa.pesapal.com/pesapalv3/api/Auth/RequestToken"
         auth_url = "https://pay.pesapal.com/v3/api/Auth/RequestToken"
 
         payload = {"consumer_key": consumer_key, "consumer_secret": consumer_secret}
@@ -42,3 +41,29 @@ class PesapalAuthenticator:
         if not token:
             token = PesapalAuthenticator.get_bearer_token(consumer_key, consumer_secret)
         return token
+
+
+class PesapalTransactionStatus:
+    @staticmethod
+    def get_transaction_status(order_tracking_id, bearer_token):
+        """
+        Get the status of a transaction from Pesapal.
+        """
+        pesapal_url = (
+            f"{PESAPAL_QUERY_PAYMENT_STATUS}?orderTrackingId={order_tracking_id}"
+        )
+
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {bearer_token}",
+        }
+
+        response = requests.get(pesapal_url, headers=headers)
+
+        if response.status_code == 200:
+            return response.json()
+        else:
+            raise Exception(
+                f"Failed to get transaction status from Pesapal: {response.text}"
+            )
